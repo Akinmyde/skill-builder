@@ -1,0 +1,27 @@
+Skill: examples/notes-helper (name: Notes_Helper)
+  ERROR  frontmatter-loads        SKILL.md:3  the description value holds ': ', which YAML reads as a new key, so the frontmatter will not parse. Fix: wrap the value in double quotes.
+  ERROR  valid-name               SKILL.md:2  the name 'Notes_Helper' may hold only lowercase letters, numbers and single hyphens. Fix: rename it to 'notes-helper'.
+  ERROR  one-hop                  reference/formats.md:5  reference/action-items.md is reached only through reference/formats.md, never from SKILL.md, so Claude may read only its start. Fix: link it from SKILL.md, or fold it into reference/formats.md.
+  ERROR  contents-list            reference/meeting-types.md  reference/meeting-types.md is 182 lines with no contents list in its first 50 lines. Fix: add a '## Contents' list at the top, so a partial read still shows the whole file.
+  ERROR  reachable-files          SKILL.md:29  the link to 'style.md' points at nothing. Fix: correct the path, or delete the link.
+  ERROR  forward-slashes          SKILL.md:25  a path uses backslashes (scripts\export_notes.py). It breaks on Mac and Linux. Fix: use forward slashes.
+  ERROR  nothing-unfinished       SKILL.md:27  an unfinished TODO or FIXME marker is left in the file. Fix: finish the work or delete the marker.
+  WARN   valid-name               SKILL.md:2  the name 'Notes_Helper' differs from the folder 'notes-helper'. Fix: make them the same, so the folder, the slash command and the name match.
+  WARN   name-says-the-job        SKILL.md:2  the name 'Notes_Helper' does not say what the skill does. Fix: name the activity, for example 'processing-pdfs'.
+  WARN   third-person             SKILL.md:3  the description is not in third person ("I can"). It goes into the system prompt. Fix: write "Fills PDF forms", not "I can" or "You can".
+  WARN   what-and-when            SKILL.md:3  the description says what the skill does but not when to use it. Fix: add a 'Use when ...' clause with the words people type.
+  WARN   reachable-files          SKILL.md  1 file(s) are named by no other file, so Claude never has a reason to open them: reference/misc.md. Fix: link each one from SKILL.md with a line on when to read it, or delete it.
+  WARN   reachable-files          SKILL.md  backup or old copies sit inside the skill: SKILL.md.old. Claude may read them as live instructions. Fix: delete them or move them out of the folder.
+  WARN   no-expiry-dates          SKILL.md:23  time-bound wording ("Before March 2025") goes stale without anyone noticing. Fix: state today's method, and move the old one under an '## Old patterns' heading.
+  WARN   install-lines            scripts/export_notes.py:5  scripts/export_notes.py needs the package 'python-docx', and no install line or manifest lists it. Fix: add 'pip install python-docx' next to the step that runs the script.
+  WARN   no-reasoning-transcript  SKILL.md:19  this asks Claude to write out its reasoning ("Think step by step and write"). Newer models may refuse it as reasoning extraction. Fix: ask for the answer and a short reason for it.
+  WARN   light-steering           SKILL.md:9,10  6 capitalised MUST, NEVER, ALWAYS, CRITICAL or IMPORTANT. When everything shouts, nothing stands out. Fix: keep capitals for the few hard lines; write the rest plainly.
+  NOTE   known-fields             SKILL.md  a claude.ai upload or the Skills API refuses fields other than allowed-tools, compatibility, description, license, metadata, name; this skill also uses version. This matters only if you upload it there.
+  NOTE   known-fields             SKILL.md:4  Claude Code ignores these fields: version. Fix: move them under 'metadata:' to keep them, or delete them.
+  NOTE   reachable-files          SKILL.md  these file names do not say what the file holds: reference/misc.md. Fix: rename them, for example 'form-field-rules.md' instead of 'doc2.md'.
+  NOTE   checklist                SKILL.md  there is a checklist but no line that says where to go back when a check fails. Fix: add one, such as 'If the check fails, return to step 2'.
+  NOTE   install-lines            SKILL.md  this skill needs packages outside the standard library (python-docx). Claude Code and claude.ai can install them; the Claude API cannot, so the skill will not run there.
+  NOTE   hard-rules-in-hooks      SKILL.md:9  wording such as "MUST ALWAYS" marks a rule that must hold on every run, and the skill has no hooks. Prose can be skipped or lost to compaction. Fix: if the rule truly cannot bend, enforce it with a hook in the frontmatter.
+Passed (no error or warning): known-fields who-starts-it description-in-limits key-use-first short-body key-rules-first checklist hard-rules-in-hooks
+Result: 7 error(s), 10 warning(s), 6 note(s) - fix the errors first.
+
