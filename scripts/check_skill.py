@@ -16,7 +16,7 @@ Each finding names its rule, as listed in references/rules.md. Levels:
     WARN   breaks a rule; fix it or write down why it stays
     NOTE   worth a look; a person decides
 
-A file named skill-builder.json in the skill folder (or the --all folder) can
+A file named skill-builder.json in the skill folder or its parent folder can
 skip rules on purpose, with a reason that is printed in every report:
     {"skip": {"valid-name": "our names use a colon namespace"}}
 
@@ -65,7 +65,9 @@ VAGUE_NAMES = {"helper", "helpers", "utils", "utilities", "tools", "tool", "docu
                "data", "files", "misc", "stuff", "general", "assistant", "skill"}
 VAGUE_NAME_PARTS = {"helper", "helpers", "utils", "util", "misc", "stuff", "thing", "things"}
 VAGUE_FILE_STEM = re.compile(r"^(doc|docs|file|files|misc|stuff|temp|tmp|untitled|new|notes?|other|test)\d*$", re.I)
-BACKUP_NAME = re.compile(r"\.(bak|orig|old|backup)$|~$|\.(bak|orig|old)\.|[._-]backup\b|\bcopy\b", re.I)
+# "copy" counts only in the forms an editor or file manager leaves ("notes copy.md", "notes copy 2.md",
+# "Copy of notes.md", "notes (copy).md", "notes.copy.md"), never as a word in a name such as check-copy.mjs.
+BACKUP_NAME = re.compile(r"\.(bak|orig|old|backup)$|~$|\.(bak|orig|old)\.|[._-]backup\b|[\s.]copy(\s\d+)?(\.[^.]+)?$|^copy of\s|\(copy\)", re.I)
 
 # Folders that are not for Claude to read: tests, fixtures, build output, environments.
 NOT_FOR_CLAUDE = {"node_modules", "__pycache__", ".git", "venv", ".venv", "evals", "tests", "test",
@@ -963,7 +965,8 @@ def main(argv=None):
         shared = load_skips(base)
         reports = [check_skill(p, dict(shared, **load_skips(p), **cli_skips), args.no_em_dash) for p in folders]
     else:
-        reports = [check_skill(base, dict(load_skips(base), **cli_skips), args.no_em_dash)]
+        # The parent folder's file applies too, so one skill checks the same way as with --all.
+        reports = [check_skill(base, dict(load_skips(base.resolve().parent, base), **cli_skips), args.no_em_dash)]
 
     if args.json:
         print(json.dumps({"skills": [as_json(r) for r in reports]}, indent=1))

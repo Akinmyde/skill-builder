@@ -123,7 +123,7 @@ Some matches look like problems but are not, so the checker leaves them alone:
 
 ### Team exceptions
 
-When your team has a rule that overrides one of these, write it down in a `skill-builder.json` file, either in the skill's folder or in the folder you pass to `--all`:
+When your team has a rule that overrides one of these, write it down in a `skill-builder.json` file, either in the skill's folder or in the folder that holds your skills. The checker reads both, whether you check one skill or use `--all`:
 
 ```json
 {"skip": {"valid-name": "our skill names use a colon namespace, such as team:deploy"}}
