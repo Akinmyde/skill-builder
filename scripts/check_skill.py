@@ -360,6 +360,19 @@ def read_value(key, value, block):
 # ---------------------------------------------------------------------------
 # Files and text
 # ---------------------------------------------------------------------------
+def has_exact_file(folder, name):
+    """True when folder holds a file named exactly `name`, letter case included.
+
+    os.path.isfile and Path.is_file follow the file system, and the macOS and Windows
+    defaults ignore case, so a 'skill.md' there answers for 'SKILL.md'. Claude Code
+    looks for SKILL.md exactly, and Linux CI does too, so a local run must match them.
+    """
+    try:
+        return name in os.listdir(folder) and os.path.isfile(os.path.join(folder, name))
+    except OSError:
+        return False
+
+
 def read_text(path):
     try:
         if path.stat().st_size > MAX_FILE_BYTES:
@@ -386,7 +399,7 @@ def collect_files(root):
             path = os.path.join(folder, d)
             if d in NOT_FOR_CLAUDE or d.startswith("."):
                 continue
-            if os.path.isfile(os.path.join(path, "SKILL.md")):
+            if has_exact_file(path, "SKILL.md"):
                 nested.append(Path(path).relative_to(root).as_posix())
                 continue
             keep.append(d)
@@ -648,7 +661,7 @@ def check_skill(root, skipped, no_em_dash=False):
         rep.add("ERROR", "frontmatter-loads", "SKILL.md", [], "%s is not a folder." % root)
         return rep
     skill_md = root / "SKILL.md"
-    if not skill_md.is_file():
+    if not has_exact_file(root, "SKILL.md"):
         other = [p.name for p in root.iterdir() if p.name.lower() == "skill.md"]
         if other:
             rep.add("ERROR", "frontmatter-loads", other[0], [], "the file is named '%s'. Fix: rename it to SKILL.md exactly." % other[0])
